@@ -175,14 +175,12 @@ Authorization: Bearer <token>
     {
         "id": 1,
         "name": "Cayo",
-        "email": "cayo@example.com",
-        "password": "$2b$10$hashdaSenha..."
+        "email": "cayo@example.com"
     },
     {
         "id": 2,
         "name": "Outro Usuario",
-        "email": "outro@example.com",
-        "password": "$2b$10$hashdaSenha..."
+        "email": "outro@example.com"
     }
 ]
 ```
