@@ -2,9 +2,8 @@
     "name": "api-login-auth",
     "version": "1.0.0",
     "main": "index.js",
-    "type": "module",
     "scripts": {
-        "dev": "ts-node-dev --respawn --loader ts-node/esm src/server.ts"
+        "dev": "ts-node-dev --respawn src/server.ts"
     },
     "author": "",
     "license": "ISC",
