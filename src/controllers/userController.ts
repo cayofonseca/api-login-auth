@@ -16,4 +16,20 @@ export const userController = {
         const users = await userService.listAll();
         return res.json(users);
     },
+    login: async (req: Request, res: Response) => {
+        try {
+            const { email, password } = req.body;
+            if (!email || !password) {
+                return res
+                    .status(400)
+                    .json({ message: "Digite o login e a senha" });
+            }
+            const { token, user } = await userService.login(email, password);
+            return res
+                .status(200)
+                .json({ token, user: { id: user.id, email: user.email } });
+        } catch (error: any) {
+            return res.status(401).json({ message: error.message });
+        }
+    },
 };
