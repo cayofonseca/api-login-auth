@@ -11,4 +11,7 @@ export const userService = {
         const hashedPassword = await bcrypt.hash(password, salt);
         return userRepository.create({ name, email, password: hashedPassword });
     },
+    listAll: async () => {
+        return userRepository.getAll();
+    },
 };
