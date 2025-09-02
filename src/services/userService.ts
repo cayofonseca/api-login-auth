@@ -1,5 +1,7 @@
 import { userRepository } from "../repositories/userRepository";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { environment } from "../config/environment";
 
 export const userService = {
     register: async (name: string, email: string, password: string) => {
@@ -13,5 +15,27 @@ export const userService = {
     },
     listAll: async () => {
         return userRepository.getAll();
+    },
+    login: async (email: string, password: string) => {
+        const user = await userRepository.findByEmail(email);
+        if (!user) {
+            throw new Error("Usuário não cadastrado");
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (passwordMatch) {
+            const token = jwt.sign(
+                {
+                    id: user.id,
+                    email: user.email,
+                },
+                environment.jwt_key as string,
+                { expiresIn: "1h" }
+            );
+
+            return token;
+        } else {
+            throw new Error("Credenciais inválidas");
+        }
     },
 };
