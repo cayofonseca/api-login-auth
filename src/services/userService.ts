@@ -33,7 +33,10 @@ export const userService = {
                 { expiresIn: "1h" }
             );
 
-            return token;
+            return {
+                token,
+                user: { id: user.id, name: user.name, email: user.email },
+            };
         } else {
             throw new Error("Credenciais inválidas");
         }
