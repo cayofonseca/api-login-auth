@@ -12,4 +12,8 @@ export const userController = {
         const newUser = await userService.register(name, email, password);
         return res.status(201).json(newUser);
     },
+    getAll: async (_req: Request, res: Response) => {
+        const users = await userService.listAll();
+        return res.json(users);
+    },
 };
