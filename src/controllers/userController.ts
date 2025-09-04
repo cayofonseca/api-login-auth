@@ -38,24 +38,26 @@ export const userController = {
             const data = req.body;
             const userId = Number(id);
             if (isNaN(userId)) {
-                return res.status(400).json({ message: "Id inválido" });
+                return res.status(400).json({ message: "Digite um Id válido" });
             }
-            if (!data) {
+            if (!data || Object.keys(data).length === 0) {
                 return res.status(400).json({
-                    message: "Os dados a serem atualizados devem ser enviados",
+                    message: "Digite o id e os dados a serem atualizados",
                 });
             }
-            const user = await userService.update(userId, data);
-            const { password, ...userWithoutPassword } = user;
+            const updatedUser = await userService.update(userId, data);
+            const { password, ...userWithoutPassword } = updatedUser;
             return res.status(200).json({
-                message: "Dados atualizados com sucesso!",
+                message: "Usuário atualizado com sucesso",
                 user: userWithoutPassword,
             });
         } catch (error: any) {
-            if (error.message === "Usuário não encontrado") {
-                res.status(404).json({ message: error.message });
+            if (error.message === "Usuário não cadastrado") {
+                return res.status(404).json({ message: error.message });
             } else {
-                res.status(400).json({ message: error.message });
+                return res
+                    .status(500)
+                    .json({ error: "Erro ao atualizar usuário" });
             }
         }
     },

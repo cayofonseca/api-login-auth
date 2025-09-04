@@ -46,17 +46,18 @@ export const userService = {
         data: Partial<{ name: string; email: string; password: string }>
     ) => {
         if (!id || Object.keys(data).length === 0) {
-            throw new Error("Insira o id e os dados a serem atualizados");
+            throw new Error(
+                "Digite o id e os dados do usuário que serão atualizados"
+            );
         }
-        const user = await userRepository.findById(id);
-        if (!user) {
-            throw new Error("Usuário não encontrado");
+        const foundUser = await userRepository.findById(id);
+        if (!foundUser) {
+            throw new Error("Usuário não cadastrado");
         }
-        const updateData: any = { ...data };
         if (data.password) {
-            const salt = 10;
-            updateData.password = await bcrypt.hash(data.password, salt);
+            const salt = await bcrypt.genSalt(10);
+            data.password = await bcrypt.hash(data.password, salt);
         }
-        return await userRepository.update(id, updateData);
+        return await userRepository.update(id, data);
     },
 };
