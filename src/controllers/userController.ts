@@ -32,4 +32,31 @@ export const userController = {
             return res.status(401).json({ message: error.message });
         }
     },
+    update: async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const userId = Number(id);
+            if (isNaN(userId)) {
+                return res.status(400).json({ message: "Id inválido" });
+            }
+            if (!data) {
+                return res.status(400).json({
+                    message: "Os dados a serem atualizados devem ser enviados",
+                });
+            }
+            const user = await userService.update(userId, data);
+            const { password, ...userWithoutPassword } = user;
+            return res.status(200).json({
+                message: "Dados atualizados com sucesso!",
+                user: userWithoutPassword,
+            });
+        } catch (error: any) {
+            if (error.message === "Usuário não encontrado") {
+                res.status(404).json({ message: error.message });
+            } else {
+                res.status(400).json({ message: error.message });
+            }
+        }
+    },
 };
