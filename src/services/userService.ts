@@ -41,4 +41,22 @@ export const userService = {
             throw new Error("Credenciais inválidas");
         }
     },
+    update: async (
+        id: number,
+        data: Partial<{ name: string; email: string; password: string }>
+    ) => {
+        if (!id || Object.keys(data).length === 0) {
+            throw new Error("Insira o id e os dados a serem atualizados");
+        }
+        const user = await userRepository.findById(id);
+        if (!user) {
+            throw new Error("Usuário não encontrado");
+        }
+        const updateData: any = { ...data };
+        if (data.password) {
+            const salt = 10;
+            updateData.password = await bcrypt.hash(data.password, salt);
+        }
+        return await userRepository.update(id, updateData);
+    },
 };
